@@ -1,13 +1,15 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
+
 import org.junit.jupiter.api.Test;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+import javax.validation.Validator;
 import java.time.LocalDate;
 import java.util.Set;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +17,7 @@ class UserTest {
     private static Validator validator;
     static {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.usingContext().getValidator();
+        validator =validatorFactory.usingContext().getValidator();
     }
     @Test
     void validEmptyLogin(){
