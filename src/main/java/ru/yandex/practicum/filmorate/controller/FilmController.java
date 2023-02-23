@@ -2,11 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +10,8 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.repository.FilmRepository;
 import ru.yandex.practicum.filmorate.service.ValidationException;
 import ru.yandex.practicum.filmorate.service.ValidateService;
+
+import javax.validation.Valid;
 
 @RestController
 @Slf4j
@@ -45,7 +43,7 @@ public class FilmController {
         }
     }
     @PostMapping(value = "/films")
-    public Film addFilm(@Valid  @RequestBody Film film, BindingResult bindingResult)throws ValidationException{
+    public Film addFilm(@Valid @RequestBody Film film, BindingResult bindingResult)throws ValidationException{
         if (bindingResult.hasErrors()) {
             log.error("Invalid film data");
             throw new ValidationException("Invalid film data");

@@ -1,5 +1,4 @@
 package ru.yandex.practicum.filmorate.controller;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
@@ -9,9 +8,8 @@ import ru.yandex.practicum.filmorate.repository.UserRepository;
 import ru.yandex.practicum.filmorate.service.ValidationException;
 import ru.yandex.practicum.filmorate.service.ValidateService;
 
-import java.util.HashMap;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class UserController {

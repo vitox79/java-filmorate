@@ -1,13 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Positive;
 import lombok.NonNull;
-
-import java.time.Duration;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
-import java.util.Date;
 
 @lombok.Getter
 @lombok.Setter
