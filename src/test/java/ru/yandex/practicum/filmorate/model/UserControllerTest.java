@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserControllerTest {
 
     private UserController userController;
-    @BeforeEach
     @Test
     void emptyName(){
         ValidateService validateService = new ValidateService();
