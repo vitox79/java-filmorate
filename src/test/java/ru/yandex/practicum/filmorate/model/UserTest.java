@@ -14,7 +14,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
-    private static Validator validator;
+    private static final Validator validator;
     static {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         validator =validatorFactory.usingContext().getValidator();
