@@ -1,10 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.repository.UserRepository;
 import ru.yandex.practicum.filmorate.service.ValidateService;
-import ru.yandex.practicum.filmorate.service.ValidationException;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,19 +22,6 @@ class UserControllerTest {
         user.setBirthday(LocalDate.of(2000,10,10));
         validateService.validateUser(user);
         assertEquals(user.getLogin(),user.getName());
-    }
-    @Test
-    void invalidLogin(){
-        ValidateService validateService = new ValidateService();
-        User user = User.builder()
-                .name("name")
-                .email("mail@mail.ru")
-                .birthday(LocalDate.of(2002, 12, 12))
-                .login("log in")
-                .build();
-
-        user.setBirthday(LocalDate.of(2000,10,10));
-        assertThrows(ValidationException.class,()->validateService.validateUser(user));
     }
     @Test
     void addUser(){

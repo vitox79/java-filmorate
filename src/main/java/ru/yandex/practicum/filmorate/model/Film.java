@@ -13,16 +13,11 @@ public class Film {
     private  int id;
 
     @NotBlank
-    @NonNull
     private String name;
-
-    @NotBlank
-    @NonNull
+    @Length(min = 1, max = 200, message = "Описание фильма не должно превышать 200 символов.")
     private String description;
-    @NonNull
     @PastOrPresent(message = "Дата релиза не может быть в будущем. ")
     private LocalDate releaseDate;
-    @Length(min = 1, max = 200, message = "Описание фильма не должно превышать 200 символов.")
     @Min(value = 0, message = "Продолжительность фильма не может быть отрицательной.")
     private long duration;
 }

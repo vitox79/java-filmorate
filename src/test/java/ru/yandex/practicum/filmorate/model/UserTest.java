@@ -1,8 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
-
 import org.junit.jupiter.api.Test;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
@@ -69,6 +67,19 @@ class UserTest {
         Set<ConstraintViolation<User>> violations;
         violations = validator.validate(user);
         assertEquals(1,violations.size(),"Invalid email");
+    }
+    @Test
+    void validLogin(){
+        User user = User.builder()
+                .name("name")
+                .email("mail@mail.ru")
+                .birthday(LocalDate.of(2002, 12, 12))
+                .login("log in")
+                .build();
+
+        Set<ConstraintViolation<User>> violations;
+        violations = validator.validate(user);
+        assertEquals(1,violations.size(),"Invalid login");
     }
 
 }

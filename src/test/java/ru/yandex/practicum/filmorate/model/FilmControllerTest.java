@@ -1,39 +1,43 @@
 package ru.yandex.practicum.filmorate.model;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.service.ValidateService;
-import ru.yandex.practicum.filmorate.service.ValidationException;
+import ru.yandex.practicum.filmorate.repository.FilmRepository;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FilmControllerTest {
 
     @Test
-    void invalidDuration(){
-        ValidateService validateService = new ValidateService();
-       Film film = Film.builder()
+    void addFilm(){
+        FilmRepository repository = new FilmRepository();
+        Film film = Film.builder()
                 .name("name")
-                .description("description")
+                .description("d")
                 .releaseDate(LocalDate.of(2002, 12, 12))
-                .duration(-20)
+                .duration(200)
                 .build();
-        assertThrows(ValidationException.class,()->validateService.validateFilm(film));
+        repository.save(film);
+        assertEquals(repository.getByID(film.getId()),film);
     }
     @Test
-    void invalidDescription(){
-        ValidateService validateService = new ValidateService();
-        StringBuilder description = new StringBuilder();
-        description.setLength(300);
-        Film film  = Film.builder()
+    void getFilms(){
+        FilmRepository repository = new FilmRepository();
+        Film film = Film.builder()
                 .name("name")
-                .description(description.toString())
+                .description("d")
                 .releaseDate(LocalDate.of(2002, 12, 12))
-                .duration(-20)
+                .duration(200)
                 .build();
-        film.setDuration(200);
-        film.setReleaseDate(LocalDate.of(2000,12,10));
-        film.setName("name");
-        assertThrows(ValidationException.class,()->validateService.validateFilm(film));
+        repository.save(film);
+        Film film2 = Film.builder()
+                .name("name2")
+                .description("d")
+                .releaseDate(LocalDate.of(2002, 12, 12))
+                .duration(200)
+                .build();
+        repository.save(film2);
+        assertEquals(repository.getAll().size(),2);
+        assertEquals(repository.getByID(film2.getId()),film2);
     }
 
 

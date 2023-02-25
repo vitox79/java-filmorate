@@ -1,8 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
-
 import org.junit.jupiter.api.Test;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
@@ -28,7 +26,8 @@ class FilmTest {
                 .duration(200)
                 .build();
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
-        assertEquals(1,violations.size(),"Invalid login");
+        System.out.println(violations);
+        assertEquals(1,violations.size(),"Invalid description");
     }
     @Test
     void validName(){
@@ -39,7 +38,22 @@ class FilmTest {
                 .duration(200)
                 .build();
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
-        assertEquals(1,violations.size(),"Invalid login");
+        assertEquals(1,violations.size(),"Invalid name");
+    }
+    @Test
+    void validDescriptionLength(){
+        StringBuilder builder = new StringBuilder();
+        builder.setLength(300);
+        String description = builder.toString();
+        Film film = Film.builder()
+                .name("name")
+                .description(description)
+                .releaseDate(LocalDate.of(2002, 12, 12))
+                .duration(200)
+                .build();
+        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        System.out.println(violations);
+        assertEquals(1,violations.size(),"Invalid description");
     }
 
 }
