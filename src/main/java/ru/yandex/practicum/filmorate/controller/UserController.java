@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
@@ -11,17 +11,17 @@ import ru.yandex.practicum.filmorate.service.ValidateService;
 import javax.validation.Valid;
 import java.util.List;
 
+
 @RestController
+@Slf4j
 public class UserController {
 
-    private  int count =1;
     final ValidateService validateService;
     final  UserRepository users = new UserRepository();
-
+    
     public  UserController(ValidateService validateService){
         this.validateService = validateService;
     }
-    private final static Logger log = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping(value = "/users")
     public User addUser(@Valid @RequestBody   User user, BindingResult bindingResult)throws ValidationException {
@@ -30,7 +30,6 @@ public class UserController {
             throw new ValidationException("Invalid user data");
         }
         validateService.validateUser(user);
-        user.setId(users.size()+1);
         users.save( user);
         return user;
     }

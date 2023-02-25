@@ -14,10 +14,12 @@ class UserControllerTest {
     @Test
     void emptyName(){
         ValidateService validateService = new ValidateService();
-        User user = new User();
-        user.setName(" ");
-        user.setEmail("mail@mail.ru");
-        user.setLogin("login");
+        User user = User.builder()
+                .name(" ")
+                .email("mail@mail.ru")
+                .birthday(LocalDate.of(2002, 12, 12))
+                .login("login")
+                .build();
         user.setBirthday(LocalDate.of(2000,10,10));
         validateService.validateUser(user);
         assertEquals(user.getLogin(),user.getName());
@@ -25,35 +27,44 @@ class UserControllerTest {
     @Test
     void invalidLogin(){
         ValidateService validateService = new ValidateService();
-        User user = new User();
-        user.setName("name");
-        user.setEmail("mail@mail.ru");
-        user.setLogin("log in");
+        User user = User.builder()
+                .name("name")
+                .email("mail@mail.ru")
+                .birthday(LocalDate.of(2002, 12, 12))
+                .login("log in")
+                .build();
+
         user.setBirthday(LocalDate.of(2000,10,10));
         assertThrows(ValidationException.class,()->validateService.validateUser(user));
     }
     @Test
     void addUser(){
         UserRepository repository = new UserRepository();
-        User user = new User();
-        user.setName("name");
-        user.setEmail("mail@mail.ru");
-        user.setLogin("login");
-        user.setBirthday(LocalDate.of(2000,10,10));
+        User user = User.builder()
+                .name("name")
+                .email("mail@mail.ru")
+                .birthday(LocalDate.of(2002, 12, 12))
+                .login("login")
+                .build();
         repository.save(user);
         assertEquals(repository.getByID(user.getId()),user);
     }
     @Test
     void getUsers(){
         UserRepository repository = new UserRepository();
-        User user = new User();
-        user.setId(1);
-        user.setName("name");
-        user.setEmail("mail@mail.ru");
-        user.setLogin("login");
-        user.setBirthday(LocalDate.of(2000,10,10));
+        User user = User.builder()
+                .name("name")
+                .email("mail@mail.ru")
+                .birthday(LocalDate.of(2002, 12, 12))
+                .login("login")
+                .build();
         repository.save(user);
-        User user2 = new User();
+        User user2 = User.builder()
+                .name("name2")
+                .email("mail2@mail.ru")
+                .birthday(LocalDate.of(2002, 12, 12))
+                .login("login2")
+                .build();
         user2.setId(2);
         user2.setName("name2");
         user2.setEmail("mail2@mail.ru");

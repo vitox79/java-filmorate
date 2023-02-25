@@ -21,21 +21,23 @@ class FilmTest {
     }
     @Test
     void validDescription(){
-        Film film = new Film();
-        film.setDuration(200);
-        film.setDescription("");
-        film.setReleaseDate(LocalDate.of(2000,12,10));
-        film.setName("name");;
+        Film film = Film.builder()
+                .name("name")
+                .description("")
+                .releaseDate(LocalDate.of(2002, 12, 12))
+                .duration(200)
+                .build();
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         assertEquals(1,violations.size(),"Invalid login");
     }
     @Test
     void validName(){
-        Film film = new Film();
-        film.setDuration(200);
-        film.setDescription("D");
-        film.setReleaseDate(LocalDate.of(2000,12,10));
-        film.setName("");;
+        Film film = Film.builder()
+                .name("")
+                .description("description")
+                .releaseDate(LocalDate.of(2002, 12, 12))
+                .duration(200)
+                .build();
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         assertEquals(1,violations.size(),"Invalid login");
     }
