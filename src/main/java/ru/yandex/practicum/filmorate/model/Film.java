@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 @Data
-@NotBlank(message = "Логин не может быть пустым.")
 @Builder
 public class Film {
     private  int id;
