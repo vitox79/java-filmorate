@@ -1,11 +1,12 @@
-package ru.yandex.practicum.filmorate.repository;
+package ru.yandex.practicum.filmorate.strorage;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-
-public class UserRepository {
+@Component
+public class InMemoryUserStorage implements UserStorage{
     HashMap<Integer, User> users = new HashMap<>();
     private int count = 0;
     public void save(User user){
