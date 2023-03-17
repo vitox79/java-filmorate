@@ -41,15 +41,4 @@ class FilmControllerTest {
         assertEquals(repository.getAll().size(),2);
         assertEquals(repository.getByID(film2.getId()),film2);
     }
-    @Test
-    public void addLike(){
-        FilmService filmService = new FilmService();
-        filmService.addLike(2,1);
-
-
-
-    }
-
-
-
 }
