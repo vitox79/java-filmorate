@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -14,12 +15,11 @@ import java.util.List;
 @RestController
 @Slf4j
 public class FilmController {
-    @Autowired
 
-    final ValidateService validateService;
-    final FilmService filmService;
+    private final ValidateService validateService;
+    private final FilmService filmService;
 
-    final UserService users;
+    private final UserService users;
 
     @Autowired
     public FilmController(ValidateService validateService, FilmService filmService, UserService users) {
@@ -85,9 +85,9 @@ public class FilmController {
         }
         User user = users.getByID(userId);
         if (user == null) {
-            String message = "Film id does not exist";
+            String message = "User id does not exist";
             log.error(message);
-            throw new FilmNotFoundException(message);
+            throw new UserNotFoundException(message);
         }
         filmService.removeLike(id, userId);
     }
@@ -102,9 +102,9 @@ public class FilmController {
         }
         User user = users.getByID(userId);
         if (user == null) {
-            String message = "Film id does not exist";
+            String message = "User id does not exist";
             log.error(message);
-            throw new FilmNotFoundException(message);
+            throw new UserNotFoundException(message);
         }
         filmService.addLike(id, userId);
     }

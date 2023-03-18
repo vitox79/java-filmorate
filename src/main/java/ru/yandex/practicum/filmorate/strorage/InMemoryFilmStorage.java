@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-    HashMap<Integer, Film> films = new HashMap<>();
+    private HashMap<Integer, Film> films = new HashMap<>();
     private int count = 0;
 
     public void save(Film film) {

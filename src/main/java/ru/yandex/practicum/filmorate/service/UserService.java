@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService {
     @Autowired
-    UserStorage users;
+    private UserStorage users;
 
     public void addUser(User user) {
         user.setFriends(new HashSet<>());

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 @Component
 public class InMemoryUserStorage implements UserStorage{
-    HashMap<Integer, User> users = new HashMap<>();
+    private HashMap<Integer, User> users = new HashMap<>();
     private int count = 0;
     public void save(User user){
         count++;

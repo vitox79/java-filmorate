@@ -18,9 +18,8 @@ import java.util.List;
 @Slf4j
 public class UserController {
 
-    final ValidateService validateService;
-    final UserService userService;
-
+    private final ValidateService validateService;
+    private final UserService userService;
 
     @Autowired
     public UserController(ValidateService validateService, UserService userService, InMemoryUserStorage users) {
@@ -71,9 +70,8 @@ public class UserController {
             String message = "User id does not exist";
             log.error(message);
             throw new UserNotFoundException(message);
-        } else {
-            userService.addFriend(userService.getByID(id), userService.getByID(friendId));
         }
+        userService.addFriend(userService.getByID(id), userService.getByID(friendId));
     }
 
     @DeleteMapping("/users/{id}/friends/{friendId}")
@@ -82,9 +80,9 @@ public class UserController {
             String message = "User id does not exist";
             log.error(message);
             throw new UserNotFoundException(message);
-        } else {
-            userService.removeFriend(userService.getByID(id), userService.getByID(friendId));
         }
+        userService.removeFriend(userService.getByID(id), userService.getByID(friendId));
+
     }
 
     @GetMapping("/users/{id}/friends")
@@ -93,9 +91,9 @@ public class UserController {
             String message = "User id does not exist";
             log.error(message);
             throw new UserNotFoundException(message);
-        } else {
-            return userService.getFriends(userService.getByID(id));
         }
+
+        return userService.getFriends(userService.getByID(id));
     }
 
     @GetMapping("/users/{id}/friends/common/{otherId}")
@@ -104,9 +102,10 @@ public class UserController {
             String message = "User id does not exist";
             log.error(message);
             throw new UserNotFoundException(message);
-        } else {
-            return userService.getCommonFriends(userService.getByID(id), userService.getByID(otherId));
         }
+
+        return userService.getCommonFriends(userService.getByID(id), userService.getByID(otherId));
+
     }
 
     @GetMapping("/users/{id}")

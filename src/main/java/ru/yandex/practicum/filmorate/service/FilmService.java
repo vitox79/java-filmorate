@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class FilmService {
     @Autowired
-    InMemoryFilmStorage films;
+    private InMemoryFilmStorage films;
 
 
     public void addLike(int filmId, int userId) {
