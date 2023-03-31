@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.repository.FilmRepository;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.strorage.InMemoryFilmStorage;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +11,7 @@ class FilmControllerTest {
 
     @Test
     void addFilm(){
-        FilmRepository repository = new FilmRepository();
+        InMemoryFilmStorage repository = new InMemoryFilmStorage();
         Film film = Film.builder()
                 .name("name")
                 .description("d")
@@ -21,7 +23,7 @@ class FilmControllerTest {
     }
     @Test
     void getFilms(){
-        FilmRepository repository = new FilmRepository();
+        InMemoryFilmStorage repository = new InMemoryFilmStorage();
         Film film = Film.builder()
                 .name("name")
                 .description("d")
@@ -39,7 +41,4 @@ class FilmControllerTest {
         assertEquals(repository.getAll().size(),2);
         assertEquals(repository.getByID(film2.getId()),film2);
     }
-
-
-
 }

@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
-import ru.yandex.practicum.filmorate.repository.UserRepository;
+import ru.yandex.practicum.filmorate.strorage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.service.ValidateService;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +25,7 @@ class UserControllerTest {
     }
     @Test
     void addUser(){
-        UserRepository repository = new UserRepository();
+        InMemoryUserStorage repository = new InMemoryUserStorage();
         User user = User.builder()
                 .name("name")
                 .email("mail@mail.ru")
@@ -37,7 +37,7 @@ class UserControllerTest {
     }
     @Test
     void getUsers(){
-        UserRepository repository = new UserRepository();
+        InMemoryUserStorage repository = new InMemoryUserStorage();
         User user = User.builder()
                 .name("name")
                 .email("mail@mail.ru")
