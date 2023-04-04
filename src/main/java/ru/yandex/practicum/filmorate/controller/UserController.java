@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.service.UserNotFoundException;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.service.ValidateService;
 import ru.yandex.practicum.filmorate.service.ValidationException;
-import ru.yandex.practicum.filmorate.strorage.UserStorage;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -83,7 +82,6 @@ public class UserController {
             throw new UserNotFoundException(message);
         }
         userService.removeFriend(userService.getByID(id), userService.getByID(friendId));
-
     }
 
     @GetMapping("/users/{id}/friends")
