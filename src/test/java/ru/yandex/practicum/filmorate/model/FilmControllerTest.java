@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.model;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import ru.yandex.practicum.filmorate.strorage.FilmDbStorage;
 import ru.yandex.practicum.filmorate.strorage.FilmStorage;
 
 import java.time.LocalDate;
@@ -16,7 +15,8 @@ class FilmControllerTest {
     FilmStorage repository;
 
     @Test
-    void addFilm(){
+    void addFilm() {
+
         Film film = Film.builder()
                 .name("name")
                 .description("d")
@@ -24,10 +24,12 @@ class FilmControllerTest {
                 .duration(200)
                 .build();
         repository.save(film);
-        assertEquals(repository.getByID(film.getId()),film);
+        assertEquals(repository.getByID(film.getId()), film);
     }
+
     @Test
-    void getFilms(){
+    void getFilms() {
+
         Film film = Film.builder()
                 .name("name")
                 .description("d")
@@ -42,7 +44,7 @@ class FilmControllerTest {
                 .duration(200)
                 .build();
         repository.save(film2);
-        assertEquals(repository.getAll().size(),2);
-        assertEquals(repository.getByID(film2.getId()),film2);
+        assertEquals(repository.getAll().size(), 2);
+        assertEquals(repository.getByID(film2.getId()), film2);
     }
 }

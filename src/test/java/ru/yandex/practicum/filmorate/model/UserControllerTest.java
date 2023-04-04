@@ -7,7 +7,8 @@ import ru.yandex.practicum.filmorate.service.ValidateService;
 import ru.yandex.practicum.filmorate.strorage.UserStorage;
 
 import java.time.LocalDate;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserControllerTest {
 
@@ -16,7 +17,8 @@ class UserControllerTest {
     UserStorage repository;
 
     @Test
-    void emptyName(){
+    void emptyName() {
+
         ValidateService validateService = new ValidateService();
         User user = User.builder()
                 .name(" ")
@@ -24,12 +26,14 @@ class UserControllerTest {
                 .birthday(LocalDate.of(2002, 12, 12))
                 .login("login")
                 .build();
-        user.setBirthday(LocalDate.of(2000,10,10));
+        user.setBirthday(LocalDate.of(2000, 10, 10));
         validateService.validateUser(user);
-        assertEquals(user.getLogin(),user.getName());
+        assertEquals(user.getLogin(), user.getName());
     }
+
     @Test
-    void addUser(){
+    void addUser() {
+
         User user = User.builder()
                 .name("name")
                 .email("mail@mail.ru")
@@ -37,10 +41,12 @@ class UserControllerTest {
                 .login("login")
                 .build();
         repository.save(user);
-        assertEquals(repository.getByID(user.getId()),user);
+        assertEquals(repository.getByID(user.getId()), user);
     }
+
     @Test
-    void getUsers(){
+    void getUsers() {
+
         User user = User.builder()
                 .name("name")
                 .email("mail@mail.ru")
@@ -58,11 +64,9 @@ class UserControllerTest {
         user2.setName("name2");
         user2.setEmail("mail2@mail.ru");
         user2.setLogin("login2");
-        user2.setBirthday(LocalDate.of(2000,10,10));
+        user2.setBirthday(LocalDate.of(2000, 10, 10));
         repository.save(user2);
-        assertEquals(repository.getAll().size(),2);
-        assertEquals(repository.getByID(2),user2);
+        assertEquals(repository.getAll().size(), 2);
+        assertEquals(repository.getByID(2), user2);
     }
-
-
 }

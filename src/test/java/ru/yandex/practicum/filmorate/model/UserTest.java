@@ -1,22 +1,26 @@
 package ru.yandex.practicum.filmorate.model;
 
 import org.junit.jupiter.api.Test;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 import java.util.Set;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserTest {
     private static final Validator validator;
+
     static {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator =validatorFactory.usingContext().getValidator();
+        validator = validatorFactory.usingContext().getValidator();
     }
+
     @Test
-    void validEmptyLogin(){
+    void validEmptyLogin() {
         User user = User.builder()
                 .name("name")
                 .email("mail@mail.ru")
@@ -27,10 +31,12 @@ class UserTest {
         Set<ConstraintViolation<User>> violations;
 
         violations = validator.validate(user);
-        assertEquals(1,violations.size(),"Invalid login");
+        assertEquals(1, violations.size(), "Invalid login");
     }
+
     @Test
-    void validBlankLogin(){
+    void validBlankLogin() {
+
         User user = User.builder()
                 .name("name")
                 .email("mail@mail.ru")
@@ -41,10 +47,12 @@ class UserTest {
         Set<ConstraintViolation<User>> violations;
         violations = validator.validate(user);
         System.out.println(violations);
-        assertEquals(1,violations.size(),"Invalid login");
+        assertEquals(1, violations.size(), "Invalid login");
     }
+
     @Test
-    void validBirthday(){
+    void validBirthday() {
+
         User user = User.builder()
                 .name("name")
                 .email("mail@mail.ru")
@@ -53,10 +61,12 @@ class UserTest {
                 .build();
         Set<ConstraintViolation<User>> violations;
         violations = validator.validate(user);
-        assertEquals(1,violations.size(),"Invalid birthday");
+        assertEquals(1, violations.size(), "Invalid birthday");
     }
+
     @Test
-    void validEmail(){
+    void validEmail() {
+
         User user = User.builder()
                 .name("name")
                 .email("mailmail@.ru")
@@ -66,10 +76,11 @@ class UserTest {
 
         Set<ConstraintViolation<User>> violations;
         violations = validator.validate(user);
-        assertEquals(1,violations.size(),"Invalid email");
+        assertEquals(1, violations.size(), "Invalid email");
     }
+
     @Test
-    void validLogin(){
+    void validLogin() {
         User user = User.builder()
                 .name("name")
                 .email("mail@mail.ru")
@@ -79,7 +90,6 @@ class UserTest {
 
         Set<ConstraintViolation<User>> violations;
         violations = validator.validate(user);
-        assertEquals(1,violations.size(),"Invalid login");
+        assertEquals(1, violations.size(), "Invalid login");
     }
-
 }
