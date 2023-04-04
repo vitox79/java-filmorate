@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.*;
 import ru.yandex.practicum.filmorate.strorage.FilmStorage;
-
-
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +17,7 @@ public class FilmService {
     private FilmStorage films;
 
     public void updateFilm(Film film) {
+
         films.save(film);
     }
     public void addLike(int filmId, int userId) {

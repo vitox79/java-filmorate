@@ -22,7 +22,7 @@ public class Film {
     private LocalDate releaseDate;
     @Min(value = 0, message = "Продолжительность фильма не может быть отрицательной.")
     private long duration;
-    private Set<Integer> likes ;
+    private Set<Integer> likes;
     private List<GenreData> genres;
     RatingData mpa;
 }

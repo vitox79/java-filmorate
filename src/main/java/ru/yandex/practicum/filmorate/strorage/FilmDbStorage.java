@@ -3,11 +3,14 @@ package ru.yandex.practicum.filmorate.strorage;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.model.*;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.GenreData;
+import ru.yandex.practicum.filmorate.model.RatingData;
 import ru.yandex.practicum.filmorate.service.DataNotFoundException;
 import ru.yandex.practicum.filmorate.service.UserNotFoundException;
 
 import java.util.*;
+
 
 @Repository("FilmDbStorage")
 public class FilmDbStorage implements FilmStorage {
@@ -17,7 +20,7 @@ public class FilmDbStorage implements FilmStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    int count = 0;
+    private int count = 0;
 
     public boolean filmExists(int id) {
         int num = jdbcTemplate.queryForObject(

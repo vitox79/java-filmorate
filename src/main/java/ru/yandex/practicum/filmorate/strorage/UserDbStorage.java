@@ -26,9 +26,10 @@ public class UserDbStorage implements UserStorage {
 
         return num > 0;
     }
+
     @Override
-    public void deleteFriendship(User user, User friend){
-        if (friend.getFriends().contains(user)){
+    public void deleteFriendship(User user, User friend) {
+        if (friend.getFriends().contains(user)) {
             jdbcTemplate.update(
                     "UPDATE FRIENDS SET STATUS = ? WHERE user_id = ?",
                     FriendshipStatus.PENDING.toString(),
@@ -36,8 +37,9 @@ public class UserDbStorage implements UserStorage {
             );
         }
         String deleteQuery = "DELETE FROM FRIENDS WHERE user_id = ? and friend_id =?";
-        jdbcTemplate.update(deleteQuery, user.getId(),friend.getId());
+        jdbcTemplate.update(deleteQuery, user.getId(), friend.getId());
     }
+
     @Override
     public void save(User user) {
         if (userExists(user.getId())) {

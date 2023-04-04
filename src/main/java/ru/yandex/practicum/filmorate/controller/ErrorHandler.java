@@ -12,28 +12,39 @@ import ru.yandex.practicum.filmorate.service.ValidationException;
 
 @RestControllerAdvice
 public class ErrorHandler {
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+
     public ErrorResponse handleIncorrectParameterException(final ValidationException e) {
+
         return new ErrorResponse(String.format(e.getMessage()));
+
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
+
     public ErrorResponse handleIncorrectParameterException(final UserNotFoundException e) {
+
         return new ErrorResponse(String.format(e.getMessage()));
+
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleIncorrectParameterException(final DataNotFoundException e) {
+
         return new ErrorResponse(String.format(e.getMessage()));
+
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleIncorrectParameterException(final FilmNotFoundException e) {
+
         return new ErrorResponse(String.format(e.getMessage()));
+
     }
 
 }
