@@ -49,7 +49,12 @@ public class UserService {
             user.setFriendshipStatuses(new HashMap<>());
             user.setFriends(userFriends);
         }
-        Set<Integer> friendFriends = friend.getFriends();
+
+        if (friend.getFriends() == null) {
+            friend.setFriends(new HashSet<>());
+            friend.setFriendshipStatuses(new HashMap<>());
+        }
+            Set<Integer> friendFriends = friend.getFriends();
         if (friendFriends != null) {
             if (friendFriends.contains(user)) {
                 user.getFriendshipStatuses().put(friend.getId(), FriendshipStatus.CONFIRMED);
@@ -57,6 +62,7 @@ public class UserService {
                 users.save(friend);
             } else {
                 user.getFriendshipStatuses().put(friend.getId(), FriendshipStatus.PENDING);
+                friend.getFriendshipStatuses().put(user.getId(), FriendshipStatus.NONE);
             }
         }
         user.getFriends().add(friend.getId());
