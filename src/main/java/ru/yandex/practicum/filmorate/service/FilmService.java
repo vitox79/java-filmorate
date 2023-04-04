@@ -21,6 +21,7 @@ public class FilmService {
         films.save(film);
     }
     public void addLike(int filmId, int userId) {
+
         Film film = films.getByID(filmId);
         if (film == null) {
             throw new FilmNotFoundException("Film id does not exit");
@@ -35,6 +36,7 @@ public class FilmService {
     }
 
     public void removeLike(int filmId, int userId) {
+
         Film film = films.getByID(filmId);
 
         if (film != null) {
@@ -47,12 +49,14 @@ public class FilmService {
     }
 
     public List<Film> getTopFilms(int count) {
+
         List<Film> filmList = films.getAll();
         filmList.sort(Comparator.comparingInt(f -> -f.getLikes().size()));
         return filmList.subList(0, Math.min(count, filmList.size()));
     }
 
     public void save(Film film) {
+
         film.setLikes(new HashSet<>());
         films.save(film);
     }
@@ -70,7 +74,9 @@ public class FilmService {
         return films.getRating(id);
     }
     public List<RatingData> getRatingAll(){
-        return films.getRatingAll();}
+
+        return films.getRatingAll();
+    }
     public Film getByID(int id) {
 
         return films.getByID(id);

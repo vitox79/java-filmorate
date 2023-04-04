@@ -17,6 +17,7 @@ public class ValidateService {
     FilmStorage filmStorage;
 
     public void validateUser(User user) {
+
         if (user == null) {
             String message = "User cannot be null";
             log.error(message);

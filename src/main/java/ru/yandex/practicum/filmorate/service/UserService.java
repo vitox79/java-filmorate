@@ -20,6 +20,7 @@ public class UserService {
     private UserStorage users;
 
     public void addUser(User user) {
+
         user.setFriends(new HashSet<>());
         users.save(user);
     }
@@ -64,6 +65,7 @@ public class UserService {
     }
 
     public void removeFriend(User user, User friend) {
+
         if ((user.getFriends() == null) || (friend.getFriends() == null)) {
             return;
         }
@@ -79,6 +81,7 @@ public class UserService {
     }
 
     public List<User> getCommonFriends(User user1, User user2) {
+
         List<User> friends = new ArrayList<>();
         if ((user1.getFriends() == null) || (user2.getFriends() == null)) {
             return friends;
@@ -93,6 +96,7 @@ public class UserService {
     }
 
     public List<User> getFriends(User user) {
+
         if (user.getFriends() == null) {
             user.setFriends(new HashSet<>());
         }

@@ -15,10 +15,12 @@ public class UserDbStorage implements UserStorage {
     private int count = 0;
 
     public UserDbStorage(JdbcTemplate jdbcTemplate) {
+
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public boolean userExists(int id) {
+
         int num = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM users WHERE id = ?",
                 Integer.class,
@@ -29,6 +31,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void deleteFriendship(User user, User friend) {
+
         if (friend.getFriends().contains(user)) {
             jdbcTemplate.update(
                     "UPDATE FRIENDS SET STATUS = ? WHERE user_id = ?",
@@ -42,6 +45,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void save(User user) {
+
         if (userExists(user.getId())) {
             jdbcTemplate.update(
                     "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?",
@@ -92,6 +96,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getByID(int id) {
+
         try {
             Map<String, Object> userRow = jdbcTemplate.queryForMap(
                     "SELECT * FROM users WHERE id = ?",
@@ -128,6 +133,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getAll() {
+
         List<User> users = new ArrayList<>();
         List<Map<String, Object>> userRows = jdbcTemplate.queryForList(
                 "SELECT * FROM users"
@@ -141,6 +147,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     public int size() {
+
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Integer.class);
     }
 }

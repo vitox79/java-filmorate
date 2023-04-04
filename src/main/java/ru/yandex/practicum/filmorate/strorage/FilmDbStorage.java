@@ -19,11 +19,13 @@ public class FilmDbStorage implements FilmStorage {
     private int count = 0;
 
     public FilmDbStorage(JdbcTemplate jdbcTemplate) {
+
         this.jdbcTemplate = jdbcTemplate;
     }
 
 
     public boolean filmExists(int id) {
+
         int num = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM films WHERE id = ?",
                 Integer.class,
@@ -32,6 +34,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public void updateGenre(Film film) {
+
         // удаляем все записи о жанрах для данного фильма из таблицы film_genre
         String deleteGenresQuery = "DELETE FROM film_genre WHERE film_id = ?";
         jdbcTemplate.update(deleteGenresQuery, film.getId());
@@ -63,6 +66,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public String checkRating(Film film) {
+
         String query = "SELECT name FROM mpa WHERE id = ?";
         String rating = jdbcTemplate.queryForObject(query, String.class, film.getMpa().getId());
         if (rating == null) {
@@ -72,6 +76,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public void updateLikes(Film film) {
+
         for (int userId : film.getLikes()) {
             int count = jdbcTemplate.queryForObject(
                     "SELECT COUNT(*) FROM likes WHERE film_id = ? AND user_id = ?",
@@ -90,6 +95,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public void getRating(Film film) {
+
         List<Map<String, Object>> ratingRows = jdbcTemplate.queryForList(
                 "SELECT r.Id, r.Name FROM MPA r " +
                         "JOIN films f ON r.Id = f.mpa_id " +
@@ -108,6 +114,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public void getLikes(Film film) {
+
         List<Map<String, Object>> likesRows = jdbcTemplate.queryForList(
                 "SELECT * FROM likes WHERE film_id = ?",
                 film.getId()
@@ -121,6 +128,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public void getGenre(Film film) {
+
         List<Map<String, Object>> genreRows = jdbcTemplate.queryForList(
                 "SELECT g.Id, g.Name FROM Genres g " +
                         "JOIN film_genre fg ON g.Id = fg.genre_id " +
@@ -139,6 +147,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void save(Film film) {
+
         if (filmExists(film.getId())) {
             String rating = checkRating(film);
             System.out.println("RATING  " + rating);
@@ -185,6 +194,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getByID(int id) {
+
         try {
             Map<String, Object> filmsRow = jdbcTemplate.queryForMap(
                     "SELECT * FROM films WHERE id = ?",
@@ -210,6 +220,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> getAll() {
+
         List<Film> films = new ArrayList<>();
         List<Map<String, Object>> filmsRows = jdbcTemplate.queryForList(
                 "SELECT * FROM films"
@@ -224,6 +235,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public GenreData getGenre(int id) {
+
         List<Map<String, Object>> genreRows = jdbcTemplate.queryForList(
                 "SELECT * FROM Genres WHERE Id = ?", id
         );
@@ -238,6 +250,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public RatingData getRating(int id) {
+
         List<Map<String, Object>> mpaRows = jdbcTemplate.queryForList(
                 "SELECT * FROM MPA WHERE Id = ?", id
         );
@@ -252,6 +265,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<RatingData> getRatingAll() {
+
         List<Map<String, Object>> mpaRows = jdbcTemplate.queryForList(
                 "SELECT * FROM MPA"
         );
@@ -270,6 +284,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<GenreData> getGenreAll() {
+
         List<Map<String, Object>> genreRows = jdbcTemplate.queryForList(
                 "SELECT * FROM Genres"
         );
@@ -284,6 +299,4 @@ public class FilmDbStorage implements FilmStorage {
         }
         return genreDataList;
     }
-
-
 }
