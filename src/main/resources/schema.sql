@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS films (
   description VARCHAR(200),
   release_date DATE,
   duration BIGINT NOT NULL,
-  mpa_id INT NOT NULL
+  mpa_id INT 
 );
 
 
