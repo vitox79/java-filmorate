@@ -50,8 +50,7 @@ public class UserService {
             user.setFriends(userFriends);
         }
         Set<Integer> friendFriends = friend.getFriends();
-        if (friendFriends == null) {
-        } else {
+        if (friendFriends != null) {
             if (friendFriends.contains(user)) {
                 user.getFriendshipStatuses().put(friend.getId(), FriendshipStatus.CONFIRMED);
                 friend.getFriendshipStatuses().put(user.getId(), FriendshipStatus.CONFIRMED);
