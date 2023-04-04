@@ -4,7 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.*;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.GenreData;
+import ru.yandex.practicum.filmorate.model.RatingData;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.*;
 
 import javax.validation.Valid;
@@ -116,20 +119,28 @@ public class FilmController {
     public List<Film> getPopularFilms(@RequestParam(defaultValue = "10") int count) {
         return filmService.getTopFilms(count);
     }
+
     @GetMapping("/genres/{id}")
     public GenreData getGenre(@PathVariable int id) {
+
         return filmService.getGenre(id);
     }
+
     @GetMapping("/mpa/{id}")
     public RatingData getRating(@PathVariable int id) {
+
         return filmService.getRating(id);
     }
+
     @GetMapping("/genres")
     public List<GenreData> getGenreAll() {
+
         return filmService.getGenreAll();
     }
+
     @GetMapping("/mpa")
     public List<RatingData> getRatingAll() {
+
         return filmService.getRatingAll();
     }
 

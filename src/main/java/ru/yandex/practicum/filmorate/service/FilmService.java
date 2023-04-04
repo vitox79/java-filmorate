@@ -58,21 +58,27 @@ public class FilmService {
         films.save(film);
     }
     public GenreData getGenre(int id){
+
         return films.getGenre(id);
     }
     public List<GenreData> getGenreAll(){
+
         return films.getGenreAll();
     }
 
     public RatingData getRating(int id){
+
         return films.getRating(id);
     }
-    public List<RatingData> getRatingAll(){return films.getRatingAll();}
+    public List<RatingData> getRatingAll(){
+        return films.getRatingAll();}
     public Film getByID(int id) {
+
         return films.getByID(id);
     }
 
     public List<Film> getAll() {
+
         return films.getAll();
     }
 

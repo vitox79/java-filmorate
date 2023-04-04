@@ -24,15 +24,18 @@ public class UserService {
     }
 
     public void updateUser(User user) {
+
         users.save(user);
     }
 
 
     public User getByID(int id) {
+
         return users.getByID(id);
     }
 
     public List<User> getAll() {
+
         return users.getAll();
     }
 
