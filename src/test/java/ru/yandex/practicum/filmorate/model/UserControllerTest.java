@@ -1,15 +1,20 @@
 package ru.yandex.practicum.filmorate.model;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.yandex.practicum.filmorate.controller.UserController;
-import ru.yandex.practicum.filmorate.strorage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.service.ValidateService;
+import ru.yandex.practicum.filmorate.strorage.UserStorage;
+
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserControllerTest {
 
     private UserController userController;
+    @Autowired
+    UserStorage repository;
+
     @Test
     void emptyName(){
         ValidateService validateService = new ValidateService();
@@ -25,7 +30,6 @@ class UserControllerTest {
     }
     @Test
     void addUser(){
-        InMemoryUserStorage repository = new InMemoryUserStorage();
         User user = User.builder()
                 .name("name")
                 .email("mail@mail.ru")
@@ -37,7 +41,6 @@ class UserControllerTest {
     }
     @Test
     void getUsers(){
-        InMemoryUserStorage repository = new InMemoryUserStorage();
         User user = User.builder()
                 .name("name")
                 .email("mail@mail.ru")

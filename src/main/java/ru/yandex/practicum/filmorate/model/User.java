@@ -4,6 +4,8 @@ import lombok.Data;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -20,4 +22,5 @@ public class User {
     @Past(message = "День рождения должно быть в прошлом.")
     private LocalDate birthday;
     private Set<Integer> friends;
+    private Map<Integer, FriendshipStatus> friendshipStatuses;
 }

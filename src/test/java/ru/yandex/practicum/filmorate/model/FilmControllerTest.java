@@ -1,17 +1,22 @@
 package ru.yandex.practicum.filmorate.model;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.strorage.InMemoryFilmStorage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import ru.yandex.practicum.filmorate.strorage.FilmDbStorage;
+import ru.yandex.practicum.filmorate.strorage.FilmStorage;
+
 import java.time.LocalDate;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FilmControllerTest {
+    @Autowired
+    @Qualifier("FilmDbStorage")
+    FilmStorage repository;
 
     @Test
     void addFilm(){
-        InMemoryFilmStorage repository = new InMemoryFilmStorage();
         Film film = Film.builder()
                 .name("name")
                 .description("d")
@@ -23,7 +28,6 @@ class FilmControllerTest {
     }
     @Test
     void getFilms(){
-        InMemoryFilmStorage repository = new InMemoryFilmStorage();
         Film film = Film.builder()
                 .name("name")
                 .description("d")

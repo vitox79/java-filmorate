@@ -1,15 +1,19 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.strorage.FilmStorage;
 
 import java.time.LocalDate;
 
 @Component
 @Slf4j
 public class ValidateService {
+    @Autowired
+    FilmStorage filmStorage;
 
     public void validateUser(User user) {
         if (user == null) {
