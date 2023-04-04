@@ -48,7 +48,6 @@ public class FilmDbStorage implements FilmStorage {
                 query = "SELECT EXISTS(SELECT 1 FROM film_genre WHERE film_id = ? and genre_id =?)";
                 exists = exists && !(jdbcTemplate.queryForObject(query, Boolean.class, film.getId(), genre.getId()));
                 if (exists) {
-                    System.out.println(genre.getId());
                     String name = jdbcTemplate.queryForObject(
                             "SELECT name FROM genres WHERE id = ?",
                             String.class,
@@ -298,7 +297,6 @@ public class FilmDbStorage implements FilmStorage {
         for (Map<String, Object> genreRow : mpaRows) {
             int id = (int) genreRow.get("id");
             String name = (String) genreRow.get("name");
-            System.out.println("   " + name);
             ratingDataList.add(new RatingData(id, name));
         }
         return ratingDataList;
