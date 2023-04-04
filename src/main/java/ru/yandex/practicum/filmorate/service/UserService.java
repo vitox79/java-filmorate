@@ -60,6 +60,8 @@ public class UserService {
             }
         }
         user.getFriends().add(friend.getId());
+        friend.getFriends().add(user.getId());
+        users.save(friend);
         users.save(user);
     }
 
