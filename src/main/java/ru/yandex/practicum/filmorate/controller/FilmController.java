@@ -35,7 +35,6 @@ public class FilmController {
             log.error("Invalid film data");
             throw new ValidationException("Invalid film data");
         }
-        System.out.println(film);
         validateService.validateFilm(film);
         filmService.save(film);
         return film;

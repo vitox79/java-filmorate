@@ -65,7 +65,6 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public String checkRating(Film film) {
-
         String query = "SELECT name FROM mpa WHERE id = ?";
         String rating = jdbcTemplate.queryForObject(query, String.class, film.getMpa().getId());
         if (rating == null) {
@@ -148,19 +147,31 @@ public class FilmDbStorage implements FilmStorage {
     public void save(Film film) {
 
         if (filmExists(film.getId())) {
-            String rating = checkRating(film);
-            System.out.println("RATING  " + rating);
 
-            film.getMpa().setName(rating);
-            jdbcTemplate.update(
-                    "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, mpa_id = ? WHERE id = ?",
-                    film.getName(),
-                    film.getDescription(),
-                    film.getReleaseDate(),
-                    film.getDuration(),
-                    film.getMpa().getId(),
-                    film.getId()
-            );
+            String rating;
+            if (film.getMpa() != null) {
+                rating = checkRating(film);
+                film.getMpa().setName(rating);
+
+                jdbcTemplate.update(
+                        "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, mpa_id = ? WHERE id = ?",
+                        film.getName(),
+                        film.getDescription(),
+                        film.getReleaseDate(),
+                        film.getDuration(),
+                        film.getMpa().getId(),
+                        film.getId()
+                );
+            } else {
+                jdbcTemplate.update(
+                        "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ? WHERE id = ?",
+                        film.getName(),
+                        film.getDescription(),
+                        film.getReleaseDate(),
+                        film.getDuration(),
+                        film.getId()
+                );
+            }
             // update likes
             if (film.getLikes() != null) {
                 updateLikes(film);
@@ -172,20 +183,32 @@ public class FilmDbStorage implements FilmStorage {
 
 
         } else {
-            // insert new film into films table
-            String rating = checkRating(film);
             count++;
             film.setId(count);
-            film.getMpa().setName(rating);
-            jdbcTemplate.update(
-                    "INSERT INTO films (name, description, release_date, duration,mpa_id , id) VALUES (?, ?, ?, ?, ?,?)",
-                    film.getName(),
-                    film.getDescription(),
-                    film.getReleaseDate(),
-                    film.getDuration(),
-                    film.getMpa().getId(),
-                    film.getId()
-            );
+            // insert new film into films table
+            if (film.getMpa() != null) {
+                String rating = checkRating(film);
+                film.getMpa().setName(rating);
+                jdbcTemplate.update(
+                        "INSERT INTO films (name, description, release_date, duration,mpa_id , id) VALUES (?, ?, ?, ?, ?,?)",
+                        film.getName(),
+                        film.getDescription(),
+                        film.getReleaseDate(),
+                        film.getDuration(),
+                        film.getMpa().getId(),
+                        film.getId()
+                );
+            } else {
+                jdbcTemplate.update(
+                        "INSERT INTO films (name, description, release_date, duration , id) VALUES (?, ?, ?, ?,?)",
+                        film.getName(),
+                        film.getDescription(),
+                        film.getReleaseDate(),
+                        film.getDuration(),
+                        film.getId()
+                );
+
+            }
             updateGenre(film);
 
         }
