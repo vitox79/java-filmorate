@@ -41,7 +41,7 @@ public class FilmService {
         Film film = films.getByID(filmId);
 
         if (film != null) {
-            if (film.getLikes()==null) {
+            if (film.getLikes() == null) {
                 return;
             }
             film.getLikes().remove(userId);
@@ -62,22 +62,22 @@ public class FilmService {
         films.save(film);
     }
 
-    public GenreData getGenre(int id){
+    public GenreData getGenre(int id) {
 
         return films.getGenre(id);
     }
 
-    public List<GenreData> getGenreAll(){
+    public List<GenreData> getGenreAll() {
 
         return films.getGenreAll();
     }
 
-    public RatingData getRating(int id){
+    public RatingData getRating(int id) {
 
         return films.getRating(id);
     }
 
-    public List<RatingData> getRatingAll(){
+    public List<RatingData> getRatingAll() {
 
         return films.getRatingAll();
     }
