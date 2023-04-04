@@ -14,20 +14,20 @@ import java.util.*;
 
 @Repository("FilmDbStorage")
 public class FilmDbStorage implements FilmStorage {
+
     private final JdbcTemplate jdbcTemplate;
+    private int count = 0;
 
     public FilmDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private int count = 0;
 
     public boolean filmExists(int id) {
         int num = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM films WHERE id = ?",
                 Integer.class,
                 id);
-
         return num > 0;
     }
 
@@ -44,7 +44,7 @@ public class FilmDbStorage implements FilmStorage {
                 String query = "SELECT EXISTS(SELECT 1 FROM genres WHERE id = ?)";
                 boolean exists = jdbcTemplate.queryForObject(query, Boolean.class, genre.getId());
                 query = "SELECT EXISTS(SELECT 1 FROM film_genre WHERE film_id = ? and genre_id =?)";
-                exists =exists && !(jdbcTemplate.queryForObject(query, Boolean.class, film.getId(),genre.getId()));
+                exists = exists && !(jdbcTemplate.queryForObject(query, Boolean.class, film.getId(), genre.getId()));
                 if (exists) {
                     System.out.println(genre.getId());
                     String name = jdbcTemplate.queryForObject(
@@ -68,7 +68,7 @@ public class FilmDbStorage implements FilmStorage {
         if (rating == null) {
             throw new DataNotFoundException("Wrong rating data.");
         }
-        return  rating;
+        return rating;
     }
 
     public void updateLikes(Film film) {
@@ -141,7 +141,7 @@ public class FilmDbStorage implements FilmStorage {
     public void save(Film film) {
         if (filmExists(film.getId())) {
             String rating = checkRating(film);
-            System.out.println("RATING  "+rating);
+            System.out.println("RATING  " + rating);
 
             film.getMpa().setName(rating);
             jdbcTemplate.update(
@@ -262,7 +262,7 @@ public class FilmDbStorage implements FilmStorage {
         for (Map<String, Object> genreRow : mpaRows) {
             int id = (int) genreRow.get("id");
             String name = (String) genreRow.get("name");
-            System.out.println("   "+name);
+            System.out.println("   " + name);
             ratingDataList.add(new RatingData(id, name));
         }
         return ratingDataList;

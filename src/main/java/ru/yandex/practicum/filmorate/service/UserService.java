@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class UserService {
+
     @Autowired
     @Qualifier("UserDbStorage")
     private UserStorage users;
@@ -51,11 +52,11 @@ public class UserService {
         if (friendFriends == null) {
         } else {
             if (friendFriends.contains(user)) {
-                user.getFriendshipStatuses().put(friend.getId(),FriendshipStatus.CONFIRMED);
-                friend.getFriendshipStatuses().put(user.getId(),FriendshipStatus.CONFIRMED);
+                user.getFriendshipStatuses().put(friend.getId(), FriendshipStatus.CONFIRMED);
+                friend.getFriendshipStatuses().put(user.getId(), FriendshipStatus.CONFIRMED);
                 users.save(friend);
             } else {
-                user.getFriendshipStatuses().put(friend.getId(),FriendshipStatus.PENDING);
+                user.getFriendshipStatuses().put(friend.getId(), FriendshipStatus.PENDING);
             }
         }
         user.getFriends().add(friend.getId());
@@ -68,13 +69,13 @@ public class UserService {
         }
         user.getFriends().remove(friend.getId());
         user.getFriendshipStatuses().remove(friend.getId());
-        if (friend.getFriendshipStatuses()!=null){
-            if (friend.getFriendshipStatuses().containsKey(user.getId())){
+        if (friend.getFriendshipStatuses() != null) {
+            if (friend.getFriendshipStatuses().containsKey(user.getId())) {
                 friend.getFriendshipStatuses().put(user.getId(), FriendshipStatus.PENDING);
                 users.save(friend);
             }
         }
-        users.deleteFriendship(user,friend);
+        users.deleteFriendship(user, friend);
     }
 
     public List<User> getCommonFriends(User user1, User user2) {

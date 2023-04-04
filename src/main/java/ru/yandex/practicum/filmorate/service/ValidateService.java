@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Component
 @Slf4j
 public class ValidateService {
+
     @Autowired
     FilmStorage filmStorage;
 
