@@ -23,7 +23,6 @@ public class FilmDbStorage implements FilmStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
     public boolean filmExists(int id) {
 
         int num = jdbcTemplate.queryForObject(

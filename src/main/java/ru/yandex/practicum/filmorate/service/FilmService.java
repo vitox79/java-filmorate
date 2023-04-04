@@ -20,6 +20,7 @@ public class FilmService {
 
         films.save(film);
     }
+
     public void addLike(int filmId, int userId) {
 
         Film film = films.getByID(filmId);
@@ -60,10 +61,12 @@ public class FilmService {
         film.setLikes(new HashSet<>());
         films.save(film);
     }
+
     public GenreData getGenre(int id){
 
         return films.getGenre(id);
     }
+
     public List<GenreData> getGenreAll(){
 
         return films.getGenreAll();
@@ -73,10 +76,12 @@ public class FilmService {
 
         return films.getRating(id);
     }
+
     public List<RatingData> getRatingAll(){
 
         return films.getRatingAll();
     }
+
     public Film getByID(int id) {
 
         return films.getByID(id);

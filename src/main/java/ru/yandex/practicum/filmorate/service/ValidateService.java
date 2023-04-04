@@ -37,7 +37,6 @@ public class ValidateService {
             log.error(message);
             throw new ValidationException(message);
         }
-
     }
 
 }
