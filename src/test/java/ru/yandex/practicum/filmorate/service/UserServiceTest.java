@@ -66,7 +66,6 @@ class UserServiceTest {
         assertTrue(users.get(0).getName().equals(user.getName()));
 
     }
-
     @Test
     void getAll() {
 
@@ -83,27 +82,39 @@ class UserServiceTest {
         userStorage.save(users.get(1));
 
         users.get(0).setId(1);
-        users.get(0).setFriends(new HashSet<>() {{
+        users.get(0).setFriends(new HashSet<>() {
+            {
 
-            add(2);
-        }});
+                add(2);
+            }
+        }
+        );
         users.get(0).setFriendshipStatuses(new HashMap<>());
-        users.get(0).setFriendshipStatuses(new HashMap<>() {{
+        users.get(0).setFriendshipStatuses(new HashMap<>() {
+            {
 
-            put(2, FriendshipStatus.CONFIRMED);
-        }});
+                put(2, FriendshipStatus.CONFIRMED);
+            }
+        }
+        );
 
         System.out.println(users.get(0));
 
         users.get(1).setId(2);
-        users.get(1).setFriends(new HashSet<Integer>(){{
+        users.get(1).setFriends(new HashSet<Integer>(){
+            {
 
-            add(1);
-        }});
-        users.get(1).setFriendshipStatuses(new HashMap<>(){{
+                add(1);
+            }
+        }
+        );
+        users.get(1).setFriendshipStatuses(new HashMap<>(){
+            {
 
                 put(1, FriendshipStatus.CONFIRMED);
-            }});
+            }
+        }
+        );
 
         userStorage.save(users.get(0));
         userStorage.save(users.get(1));
@@ -123,25 +134,39 @@ class UserServiceTest {
         userStorage.save(users.get(1));
 
         users.get(0).setId(1);
-        users.get(0).setFriends(new HashSet<Integer>(){{
+        users.get(0).setFriends(new HashSet<Integer>(){
+            {
 
-            add(2);
-        }});
+                add(2);
+            }
+        }
+        );
         users.get(0).setFriendshipStatuses(new HashMap<>());
-        users.get(0).setFriendshipStatuses(new HashMap<>(){{
+        users.get(0).setFriendshipStatuses(new HashMap<>(){
+            {
 
                 put(2, FriendshipStatus.CONFIRMED);
-        }});
+            }
+        }
+        );
 
         System.out.println(users.get(0));
 
         users.get(1).setId(2);
-        users.get(1).setFriends(new HashSet<Integer>(){{
-            add(1);
-        }});
-        users.get(1).setFriendshipStatuses(new HashMap<>(){{
-            put(1, FriendshipStatus.CONFIRMED);
-        }});
+        users.get(1).setFriends(new HashSet<Integer>(){
+            {
+
+                add(1);
+            }
+        }
+        );
+        users.get(1).setFriendshipStatuses(new HashMap<>(){
+            {
+
+                put(1, FriendshipStatus.CONFIRMED);
+            }
+        }
+        );
 
         userStorage.save(users.get(0));
         userStorage.save(users.get(1));
