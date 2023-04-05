@@ -84,8 +84,7 @@ public class UserDbStorage implements UserStorage {
             count++;
             user.setId(count);
             jdbcTemplate.update(
-                    "INSERT INTO users (id, email, login, name, birthday) VALUES (?, ?, ?, ?, ?)",
-                    user.getId(),
+                    "INSERT INTO users (email, login, name, birthday) VALUES (?, ?, ?, ?)",
                     user.getEmail(),
                     user.getLogin(),
                     user.getName(),
