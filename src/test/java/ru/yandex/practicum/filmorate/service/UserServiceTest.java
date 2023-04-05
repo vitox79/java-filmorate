@@ -8,8 +8,6 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import ru.yandex.practicum.filmorate.model.FriendshipStatus;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.strorage.FilmDbStorage;
-import ru.yandex.practicum.filmorate.strorage.FilmStorage;
 import ru.yandex.practicum.filmorate.strorage.UserDbStorage;
 import ru.yandex.practicum.filmorate.strorage.UserStorage;
 
@@ -35,7 +33,7 @@ class UserServiceTest {
         userStorage = new UserDbStorage(jdbcTemplate);
     }
 
-     List<User> createUsers(){
+     List<User> createUsers() {
         List<User> users = new ArrayList<>();
          User user1 = User.builder()
                  .name("name1")
