@@ -83,7 +83,7 @@ class FilmServiceTest {
         List<Film> films = makeFilms();
         filmStorage.save(films.get(0));
         filmStorage.save(films.get(1));
-        Film film =filmStorage.getByID(2);
+        Film film = filmStorage.getByID(2);
         assertTrue(film.getName().equals(films.get(1).getName()));
     }
 
