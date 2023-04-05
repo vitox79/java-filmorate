@@ -86,7 +86,7 @@ class FilmoRateApplicationTests {
         assertThat(userOptional2)
                 .isPresent()
                 .hasValueSatisfying(user ->
-                        assertThat(user).hasFieldOrPropertyWithValue("id",2 )
+                        assertThat(user).hasFieldOrPropertyWithValue("id",2)
                 );
 
         assertThat(userOptional2)
