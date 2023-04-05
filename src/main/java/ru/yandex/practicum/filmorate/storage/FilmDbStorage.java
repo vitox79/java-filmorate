@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.strorage;
+package ru.yandex.practicum.filmorate.storage;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

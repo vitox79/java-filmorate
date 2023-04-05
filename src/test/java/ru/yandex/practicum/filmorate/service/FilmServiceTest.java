@@ -10,8 +10,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.GenreData;
 import ru.yandex.practicum.filmorate.model.RatingData;
-import ru.yandex.practicum.filmorate.strorage.FilmDbStorage;
-import ru.yandex.practicum.filmorate.strorage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.FilmDbStorage;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
