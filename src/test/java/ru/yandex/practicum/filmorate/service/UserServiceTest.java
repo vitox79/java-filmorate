@@ -88,8 +88,7 @@ class UserServiceTest {
         userStorage.save(users.get(1));
 
         users.get(0).setId(1);
-        users.get(0).setFriends(new HashSet<>()
-        {
+        users.get(0).setFriends(new HashSet<>() {
             {
 
                 add(2);
@@ -97,8 +96,7 @@ class UserServiceTest {
         }
         );
         users.get(0).setFriendshipStatuses(new HashMap<>());
-        users.get(0).setFriendshipStatuses(new HashMap<>()
-        {
+        users.get(0).setFriendshipStatuses(new HashMap<>() {
             {
 
                 put(2, FriendshipStatus.CONFIRMED);
