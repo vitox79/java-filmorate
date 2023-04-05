@@ -17,6 +17,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
+
     private EmbeddedDatabase embeddedDatabase;
     private JdbcTemplate jdbcTemplate;
     private UserStorage userStorage;
@@ -34,6 +35,7 @@ class UserServiceTest {
     }
 
      List<User> createUsers() {
+
         List<User> users = new ArrayList<>();
          User user1 = User.builder()
                  .name("name1")
@@ -71,11 +73,8 @@ class UserServiceTest {
     }
 
     @Test
-    void getByID() {
-    }
-
-    @Test
     void getAll() {
+
         List<User> users = createUsers();
         userStorage.save(users.get(0));
         userStorage.save(users.get(1));
@@ -91,13 +90,13 @@ class UserServiceTest {
         users.get(0).setId(1);
         users.get(0).setFriends(new HashSet<Integer>(){{ add(2); }});
         users.get(0).setFriendshipStatuses(new HashMap<>());
-        users.get(0).setFriendshipStatuses(new HashMap<>(){{put(2, FriendshipStatus.CONFIRMED);}});
+        users.get(0).setFriendshipStatuses(new HashMap<>(){{ put(2, FriendshipStatus.CONFIRMED); }});
 
         System.out.println(users.get(0));
 
         users.get(1).setId(2);
         users.get(1).setFriends(new HashSet<Integer>(){{ add(1); }});
-        users.get(1).setFriendshipStatuses(new HashMap<>(){{put(1, FriendshipStatus.CONFIRMED);}});
+        users.get(1).setFriendshipStatuses(new HashMap<>(){{ put(1, FriendshipStatus.CONFIRMED); }});
 
         userStorage.save(users.get(0));
         userStorage.save(users.get(1));
@@ -119,13 +118,13 @@ class UserServiceTest {
         users.get(0).setId(1);
         users.get(0).setFriends(new HashSet<Integer>(){{ add(2); }});
         users.get(0).setFriendshipStatuses(new HashMap<>());
-        users.get(0).setFriendshipStatuses(new HashMap<>(){{put(2, FriendshipStatus.CONFIRMED);}});
+        users.get(0).setFriendshipStatuses(new HashMap<>(){{ put(2, FriendshipStatus.CONFIRMED); }});
 
         System.out.println(users.get(0));
 
         users.get(1).setId(2);
         users.get(1).setFriends(new HashSet<Integer>(){{ add(1); }});
-        users.get(1).setFriendshipStatuses(new HashMap<>(){{put(1, FriendshipStatus.CONFIRMED);}});
+        users.get(1).setFriendshipStatuses(new HashMap<>(){{ put(1, FriendshipStatus.CONFIRMED); }});
 
         userStorage.save(users.get(0));
         userStorage.save(users.get(1));
