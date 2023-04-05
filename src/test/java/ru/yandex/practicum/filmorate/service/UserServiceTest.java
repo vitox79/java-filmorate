@@ -12,9 +12,12 @@ import ru.yandex.practicum.filmorate.storage.UserDbStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserServiceTest {
 
@@ -34,27 +37,27 @@ class UserServiceTest {
         userStorage = new UserDbStorage(jdbcTemplate);
     }
 
-     List<User> createUsers() {
+    List<User> createUsers() {
 
         List<User> users = new ArrayList<>();
-         User user1 = User.builder()
-                 .name("name1")
-                 .email("mail@mail.ru")
-                 .birthday(LocalDate.of(2002, 12, 12))
-                 .login("login2")
-                 .build();
-         User user2 = User.builder()
-                 .name("name2")
-                 .email("mail@mail.ru")
-                 .birthday(LocalDate.of(2002, 12, 12))
-                 .login("login2")
-                 .build();
-         users.add(user1);
-         users.add(user2);
-         users.add(user1);
-         users.add(user2);
-         return users;
-     }
+        User user1 = User.builder()
+                .name("name1")
+                .email("mail@mail.ru")
+                .birthday(LocalDate.of(2002, 12, 12))
+                .login("login2")
+                .build();
+        User user2 = User.builder()
+                .name("name2")
+                .email("mail@mail.ru")
+                .birthday(LocalDate.of(2002, 12, 12))
+                .login("login2")
+                .build();
+        users.add(user1);
+        users.add(user2);
+        users.add(user1);
+        users.add(user2);
+        return users;
+    }
 
     @Test
     void addUser() {
@@ -66,6 +69,7 @@ class UserServiceTest {
         assertTrue(users.get(0).getName().equals(user.getName()));
 
     }
+
     @Test
     void getAll() {
 
@@ -77,44 +81,24 @@ class UserServiceTest {
 
     @Test
     void addFriend() {
+
         List<User> users = createUsers();
         userStorage.save(users.get(0));
         userStorage.save(users.get(1));
 
         users.get(0).setId(1);
-        users.get(0).setFriends(new HashSet<>() {
-            {
-
-                add(2);
-            }
-        }
-        );
+        users.get(0).setFriends(new HashSet<>());
+        users.get(0).getFriends().add(2);
         users.get(0).setFriendshipStatuses(new HashMap<>());
-        users.get(0).setFriendshipStatuses(new HashMap<>() {
-            {
+        users.get(0).setFriendshipStatuses(new HashMap<>());
+        users.get(0).getFriendshipStatuses().put(2, FriendshipStatus.CONFIRMED);
 
-                put(2, FriendshipStatus.CONFIRMED);
-            }
-        }
-        );
-
-        System.out.println(users.get(0));
 
         users.get(1).setId(2);
-        users.get(1).setFriends(new HashSet<Integer>(){
-            {
-
-                add(1);
-            }
-        }
-        );
-        users.get(1).setFriendshipStatuses(new HashMap<>(){
-            {
-
-                put(1, FriendshipStatus.CONFIRMED);
-            }
-        }
-        );
+        users.get(1).setFriends(new HashSet<Integer>());
+        users.get(1).getFriends().add(1);
+        users.get(1).setFriendshipStatuses(new HashMap<>());
+        users.get(1).getFriendshipStatuses().put(1, FriendshipStatus.CONFIRMED);
 
         userStorage.save(users.get(0));
         userStorage.save(users.get(1));
@@ -134,50 +118,26 @@ class UserServiceTest {
         userStorage.save(users.get(1));
 
         users.get(0).setId(1);
-        users.get(0).setFriends(new HashSet<Integer>(){
-            {
-
-                add(2);
-            }
-        }
-        );
+        users.get(0).setFriends(new HashSet<Integer>());
+        users.get(0).getFriends().add(2);
         users.get(0).setFriendshipStatuses(new HashMap<>());
-        users.get(0).setFriendshipStatuses(new HashMap<>(){
-            {
+        users.get(0).getFriendshipStatuses().put(2, FriendshipStatus.CONFIRMED);
 
-                put(2, FriendshipStatus.CONFIRMED);
-            }
-        }
-        );
-
-        System.out.println(users.get(0));
 
         users.get(1).setId(2);
-        users.get(1).setFriends(new HashSet<Integer>(){
-            {
-
-                add(1);
-            }
-        }
-        );
-        users.get(1).setFriendshipStatuses(new HashMap<>(){
-            {
-
-                put(1, FriendshipStatus.CONFIRMED);
-            }
-        }
-        );
+        users.get(1).setFriends(new HashSet<Integer>());
+        users.get(1).getFriends().add(1);
+        users.get(1).setFriendshipStatuses(new HashMap<>());
+        users.get(1).getFriendshipStatuses().put(1, FriendshipStatus.CONFIRMED);
 
         userStorage.save(users.get(0));
         userStorage.save(users.get(1));
-        userStorage.deleteFriendship(users.get(0),users.get(1));
-        userStorage.deleteFriendship(users.get(1),users.get(0));
+        userStorage.deleteFriendship(users.get(0), users.get(1));
+        userStorage.deleteFriendship(users.get(1), users.get(0));
         User user1 = userStorage.getByID(1);
         User user2 = userStorage.getByID(2);
 
         assertTrue(user1.getFriends().isEmpty());
         assertTrue(user2.getFriends().isEmpty());
-
-
     }
 }
