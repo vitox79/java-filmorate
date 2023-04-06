@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.service.UserNotFoundException;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.service.ValidateService;
 import ru.yandex.practicum.filmorate.service.ValidationException;
-import ru.yandex.practicum.filmorate.strorage.InMemoryUserStorage;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(ValidateService validateService, UserService userService, InMemoryUserStorage users) {
+    public UserController(ValidateService validateService, UserService userService) {
         this.userService = userService;
         this.validateService = validateService;
     }
@@ -51,12 +51,12 @@ public class UserController {
             log.error(message);
             throw new UserNotFoundException(message);
         }
-
         currentUser.setEmail(user.getEmail());
         currentUser.setLogin(user.getLogin());
         currentUser.setName(user.getName());
         currentUser.setBirthday(user.getBirthday());
-        return user;
+        userService.updateUser(currentUser);
+        return currentUser;
     }
 
     @GetMapping("/users")
@@ -82,7 +82,6 @@ public class UserController {
             throw new UserNotFoundException(message);
         }
         userService.removeFriend(userService.getByID(id), userService.getByID(friendId));
-
     }
 
     @GetMapping("/users/{id}/friends")
