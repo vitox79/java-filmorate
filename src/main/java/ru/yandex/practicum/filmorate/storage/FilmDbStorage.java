@@ -205,7 +205,7 @@ public class FilmDbStorage implements FilmStorage {
                     .releaseDate(((java.sql.Date) row.get("release_date")).toLocalDate())
                     .duration((long) row.get("duration"))
                     .build();
-            if ((String) row.get("mpa_name") != null){
+            if ((String) row.get("mpa_name") != null) {
                 film.setMpa(new RatingData((int) row.get("mpa_id"),(String) row.get("mpa_name")));
             }
 
