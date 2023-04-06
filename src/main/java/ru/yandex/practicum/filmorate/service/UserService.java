@@ -27,7 +27,7 @@ public class UserService {
 
     public void updateUser(User user) {
 
-        users.save(user);
+        users.update(user);
     }
 
 
@@ -67,8 +67,8 @@ public class UserService {
         }
         user.getFriends().add(friend.getId());
         friend.getFriends().add(user.getId());
-        users.save(friend);
-        users.save(user);
+        users.update(friend);
+        users.update(user);
     }
 
     public void removeFriend(User user, User friend) {
@@ -81,7 +81,7 @@ public class UserService {
         if (friend.getFriendshipStatuses() != null) {
             if (friend.getFriendshipStatuses().containsKey(user.getId())) {
                 friend.getFriendshipStatuses().put(user.getId(), FriendshipStatus.PENDING);
-                users.save(friend);
+                users.update(friend);
             }
         }
         users.deleteFriendship(user, friend);

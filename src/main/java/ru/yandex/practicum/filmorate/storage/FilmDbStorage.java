@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,6 +11,7 @@ import ru.yandex.practicum.filmorate.model.RatingData;
 import ru.yandex.practicum.filmorate.service.DataNotFoundException;
 import ru.yandex.practicum.filmorate.service.UserNotFoundException;
 
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -16,51 +19,20 @@ import java.util.*;
 public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    @Qualifier("GenreDbStorage")
+    private GenreStorage genres;
+
+    @Autowired
+    @Qualifier("MpaDbStorage")
+    private MpaStorage mpa;
+
     private int count = 0;
 
     public FilmDbStorage(JdbcTemplate jdbcTemplate) {
 
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    public boolean filmExists(int id) {
-
-        int num = jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM films WHERE id = ?",
-                Integer.class,
-                id);
-        return num > 0;
-    }
-
-    public void updateGenre(Film film) {
-
-        // удаляем все записи о жанрах для данного фильма из таблицы film_genre
-        String deleteGenresQuery = "DELETE FROM film_genre WHERE film_id = ?";
-        jdbcTemplate.update(deleteGenresQuery, film.getId());
-        String insertGenresQuery = "INSERT INTO film_genre (film_id, genre_id) VALUES (?, ?)";
-        List<GenreData> genres = film.getGenres();
-        if (genres != null) {
-
-            for (GenreData genre : genres) {
-                // проверяем, существует ли жанр в таблице genres
-                String query = "SELECT EXISTS(SELECT 1 FROM genres WHERE id = ?)";
-                boolean exists = jdbcTemplate.queryForObject(query, Boolean.class, genre.getId());
-                query = "SELECT EXISTS(SELECT 1 FROM film_genre WHERE film_id = ? and genre_id =?)";
-                exists = exists && !(jdbcTemplate.queryForObject(query, Boolean.class, film.getId(), genre.getId()));
-                if (exists) {
-                    String name = jdbcTemplate.queryForObject(
-                            "SELECT name FROM genres WHERE id = ?",
-                            String.class,
-                            genre.getId()
-                    );
-
-                    genre.setName(name);
-                    // добавляем запись о связи между фильмом и жанром в таблицу film_genre
-                    jdbcTemplate.update(insertGenresQuery, film.getId(), genre.getId());
-                }
-            }
-
-        }
     }
 
     public String checkRating(Film film) {
@@ -91,25 +63,6 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
-    public void getRating(Film film) {
-
-        List<Map<String, Object>> ratingRows = jdbcTemplate.queryForList(
-                "SELECT r.Id, r.Name FROM MPA r " +
-                        "JOIN films f ON r.Id = f.mpa_id " +
-                        "WHERE f.Id = ?",
-                film.getId()
-        );
-
-        RatingData rating = null;
-        if (!ratingRows.isEmpty()) {
-            int ratingId = (int) ratingRows.get(0).get("Id");
-            String ratingName = (String) ratingRows.get(0).get("Name");
-            rating = new RatingData(ratingId, ratingName);
-        }
-
-        film.setMpa(rating);
-    }
-
     public void getLikes(Film film) {
 
         List<Map<String, Object>> likesRows = jdbcTemplate.queryForList(
@@ -124,93 +77,74 @@ public class FilmDbStorage implements FilmStorage {
         film.setLikes(likes);
     }
 
-    public void getGenre(Film film) {
+    @Override
+    public void update(Film film) {
 
-        List<Map<String, Object>> genreRows = jdbcTemplate.queryForList(
-                "SELECT g.Id, g.Name FROM Genres g " +
-                        "JOIN film_genre fg ON g.Id = fg.genre_id " +
-                        "WHERE fg.film_id = ?",
-                film.getId()
-        );
+        String rating;
+        if (film.getMpa() != null) {
+            rating = checkRating(film);
+            film.getMpa().setName(rating);
 
-        List<GenreData> genres = new ArrayList<>();
-        for (Map<String, Object> genreRow : genreRows) {
-            int genreId = (int) genreRow.get("Id");
-            String genreName = (String) genreRow.get("Name");
-            genres.add(new GenreData(genreId, genreName));
+            jdbcTemplate.update(
+                    "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, mpa_id = ? WHERE id = ?",
+                    film.getName(),
+                    film.getDescription(),
+                    film.getReleaseDate(),
+                    film.getDuration(),
+                    film.getMpa().getId(),
+                    film.getId()
+            );
+        } else {
+            jdbcTemplate.update(
+                    "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ? WHERE id = ?",
+                    film.getName(),
+                    film.getDescription(),
+                    film.getReleaseDate(),
+                    film.getDuration(),
+                    film.getId()
+            );
         }
-        film.setGenres(genres);
+        // update likes
+        System.out.println(film);
+        if (film.getLikes() != null) {
+            updateLikes(film);
+        }
+        // update genres
+        if (film.getGenres() != null) {
+            genres.updateGenre(film);
+        }
     }
 
     @Override
     public void save(Film film) {
 
-        if (filmExists(film.getId())) {
-
-            String rating;
-            if (film.getMpa() != null) {
-                rating = checkRating(film);
-                film.getMpa().setName(rating);
-
-                jdbcTemplate.update(
-                        "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, mpa_id = ? WHERE id = ?",
-                        film.getName(),
-                        film.getDescription(),
-                        film.getReleaseDate(),
-                        film.getDuration(),
-                        film.getMpa().getId(),
-                        film.getId()
-                );
-            } else {
-                jdbcTemplate.update(
-                        "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ? WHERE id = ?",
-                        film.getName(),
-                        film.getDescription(),
-                        film.getReleaseDate(),
-                        film.getDuration(),
-                        film.getId()
-                );
-            }
-            // update likes
-            if (film.getLikes() != null) {
-                updateLikes(film);
-            }
-            // update genres
-            if (film.getGenres() != null) {
-                updateGenre(film);
-            }
-
-
+        count++;
+        film.setId(count);
+        // insert new film into films table
+        if (film.getMpa() != null) {
+            String rating = checkRating(film);
+            film.getMpa().setName(rating);
+            jdbcTemplate.update(
+                    "INSERT INTO films (name, description, release_date, duration,mpa_id , id) VALUES (?, ?, ?, ?, ?,?)",
+                    film.getName(),
+                    film.getDescription(),
+                    film.getReleaseDate(),
+                    film.getDuration(),
+                    film.getMpa().getId(),
+                    film.getId()
+            );
         } else {
-            count++;
-            film.setId(count);
-            // insert new film into films table
-            if (film.getMpa() != null) {
-                String rating = checkRating(film);
-                film.getMpa().setName(rating);
-                jdbcTemplate.update(
-                        "INSERT INTO films (name, description, release_date, duration,mpa_id , id) VALUES (?, ?, ?, ?, ?,?)",
-                        film.getName(),
-                        film.getDescription(),
-                        film.getReleaseDate(),
-                        film.getDuration(),
-                        film.getMpa().getId(),
-                        film.getId()
-                );
-            } else {
-                jdbcTemplate.update(
-                        "INSERT INTO films (name, description, release_date, duration , id) VALUES (?, ?, ?, ?,?)",
-                        film.getName(),
-                        film.getDescription(),
-                        film.getReleaseDate(),
-                        film.getDuration(),
-                        film.getId()
-                );
-
-            }
-            updateGenre(film);
+            jdbcTemplate.update(
+                    "INSERT INTO films (name, description, release_date, duration , id) VALUES (?, ?, ?, ?,?)",
+                    film.getName(),
+                    film.getDescription(),
+                    film.getReleaseDate(),
+                    film.getDuration(),
+                    film.getId()
+            );
 
         }
+        genres.updateGenre(film);
     }
 
     @Override
@@ -230,8 +164,8 @@ public class FilmDbStorage implements FilmStorage {
                     .build();
 
             getLikes(film);
-            getGenre(film);
-            getRating(film);
+            genres.getGenre(film);
+            mpa.getRating(film);
             return film;
         } catch (EmptyResultDataAccessException e) {
             String message = "Film id does not exist";
@@ -243,80 +177,56 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> getAll() {
 
         List<Film> films = new ArrayList<>();
-        List<Map<String, Object>> filmsRows = jdbcTemplate.queryForList(
-                "SELECT * FROM films"
-        );
-        for (Map<String, Object> filmsRow : filmsRows) {
-            int id = (int) filmsRow.get("id");
-            Film film = getByID(id);
+        String query = "SELECT f.*, " +
+                "GROUP_CONCAT(DISTINCT g.id) AS genre_ids, " +
+                "GROUP_CONCAT(DISTINCT g.name) AS genre_names, " +
+                "GROUP_CONCAT(DISTINCT likes.user_id) AS likes, " +
+                "m.id AS mpa_id, " +
+                "m.name AS mpa_name " +
+                "FROM films f " +
+                "LEFT JOIN film_genre fg ON fg.film_id = f.id " +
+                "LEFT JOIN genres g ON g.id = fg.genre_id " +
+                "LEFT JOIN MPA m ON m.id = f.mpa_id " +
+                "LEFT JOIN LIKES likes ON likes.film_id = f.id " +
+                "GROUP BY f.id, m.id";
+
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(query);
+        for (Map<String, Object> row : rows) {
+            Film film = Film.builder()
+                    .id((int) row.get("id"))
+                    .name((String) row.get("name"))
+                    .description((String) row.get("description"))
+                    .releaseDate(((java.sql.Date) row.get("release_date")).toLocalDate())
+                    .duration((long) row.get("duration"))
+                    .mpa(new RatingData((int) row.get("mpa_id"), (String) row.get("mpa_name")))
+                    .build();
+
+            Set<Integer> likes = new HashSet<>();
+            String likesStr = (String) row.get("likes");
+            if (likesStr != null) {
+                String[] likeIds = likesStr.split(",");
+                for (String likeId : likeIds) {
+                    likes.add(Integer.parseInt(likeId));
+                }
+            }
+            film.setLikes(likes);
+
+            List<GenreData> genres = new ArrayList<>();
+            String genreIdsStr = (String) row.get("genre_ids");
+            String genreNamesStr = (String) row.get("genre_names");
+            if (genreIdsStr != null && genreNamesStr != null) {
+                String[] genreIds = genreIdsStr.split(",");
+                String[] genreNames = genreNamesStr.split(",");
+                for (int i = 0; i < genreIds.length; i++) {
+                    int genreId = Integer.parseInt(genreIds[i]);
+                    String genreName = genreNames[i];
+                    genres.add(new GenreData(genreId, genreName));
+                }
+            }
+            film.setGenres(genres);
             films.add(film);
         }
         return films;
     }
-
-    @Override
-    public GenreData getGenre(int id) {
-
-        List<Map<String, Object>> genreRows = jdbcTemplate.queryForList(
-                "SELECT * FROM Genres WHERE Id = ?", id
-        );
-        if (genreRows.isEmpty()) {
-            throw new DataNotFoundException("Data not found");
-        }
-        Map<String, Object> genreRow = genreRows.get(0);
-        int genreId = (int) genreRow.get("id");
-        String genreName = (String) genreRow.get("name");
-        return new GenreData(genreId, genreName);
-    }
-
-    @Override
-    public RatingData getRating(int id) {
-
-        List<Map<String, Object>> mpaRows = jdbcTemplate.queryForList(
-                "SELECT * FROM MPA WHERE Id = ?", id
-        );
-        if (mpaRows.isEmpty()) {
-            throw new DataNotFoundException("Rating id does not exist");
-        }
-        Map<String, Object> genreRow = mpaRows.get(0);
-        id = (int) genreRow.get("id");
-        String name = (String) genreRow.get("name");
-        return new RatingData(id, name);
-    }
-
-    @Override
-    public List<RatingData> getRatingAll() {
-
-        List<Map<String, Object>> mpaRows = jdbcTemplate.queryForList(
-                "SELECT * FROM MPA"
-        );
-        if (mpaRows.isEmpty()) {
-            throw new DataNotFoundException("Data not found");
-        }
-        List<RatingData> ratingDataList = new ArrayList<>();
-        for (Map<String, Object> genreRow : mpaRows) {
-            int id = (int) genreRow.get("id");
-            String name = (String) genreRow.get("name");
-            ratingDataList.add(new RatingData(id, name));
-        }
-        return ratingDataList;
-    }
-
-    @Override
-    public List<GenreData> getGenreAll() {
-
-        List<Map<String, Object>> genreRows = jdbcTemplate.queryForList(
-                "SELECT * FROM Genres"
-        );
-        if (genreRows.isEmpty()) {
-            throw new DataNotFoundException("Data not found");
-        }
-        List<GenreData> genreDataList = new ArrayList<>();
-        for (Map<String, Object> genreRow : genreRows) {
-            int id = (int) genreRow.get("id");
-            String name = (String) genreRow.get("name");
-            genreDataList.add(new GenreData(id, name));
-        }
-        return genreDataList;
-    }
 }
+

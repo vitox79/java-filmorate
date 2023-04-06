@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.*;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.MpaStorage;
+
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -16,9 +19,17 @@ public class FilmService {
     @Qualifier("FilmDbStorage")
     private FilmStorage films;
 
+    @Autowired
+    @Qualifier("GenreDbStorage")
+    private GenreStorage genres;
+
+    @Autowired
+    @Qualifier("MpaDbStorage")
+    private MpaStorage mpa;
+
     public void updateFilm(Film film) {
 
-        films.save(film);
+        films.update(film);
     }
 
     public void addLike(int filmId, int userId) {
@@ -33,7 +44,7 @@ public class FilmService {
             film.setLikes(likes);
         }
         film.getLikes().add(userId);
-        films.save(film);
+        films.update(film);
     }
 
     public void removeLike(int filmId, int userId) {
@@ -45,7 +56,7 @@ public class FilmService {
                 return;
             }
             film.getLikes().remove(userId);
-            films.save(film);
+            films.update(film);
         }
     }
 
@@ -64,22 +75,22 @@ public class FilmService {
 
     public GenreData getGenre(int id) {
 
-        return films.getGenre(id);
+        return genres.getGenreByID(id);
     }
 
     public List<GenreData> getGenreAll() {
 
-        return films.getGenreAll();
+        return genres.getGenreAll();
     }
 
     public RatingData getRating(int id) {
 
-        return films.getRating(id);
+        return mpa.getRating(id);
     }
 
     public List<RatingData> getRatingAll() {
 
-        return films.getRatingAll();
+        return mpa.getRatingAll();
     }
 
     public Film getByID(int id) {

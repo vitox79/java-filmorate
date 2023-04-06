@@ -44,9 +44,8 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public void save(User user) {
+    public void update(User user) {
 
-        if (userExists(user.getId())) {
             jdbcTemplate.update(
                     "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?",
                     user.getEmail(),
@@ -80,17 +79,20 @@ public class UserDbStorage implements UserStorage {
                     }
                 }
             }
-        } else {
-            count++;
-            user.setId(count);
-            jdbcTemplate.update(
-                    "INSERT INTO users (email, login, name, birthday) VALUES (?, ?, ?, ?)",
-                    user.getEmail(),
-                    user.getLogin(),
-                    user.getName(),
-                    user.getBirthday()
-            );
+
         }
+
+    @Override
+    public void save(User user) {
+        count++;
+        user.setId(count);
+        jdbcTemplate.update(
+                "INSERT INTO users (email, login, name, birthday) VALUES (?, ?, ?, ?)",
+                user.getEmail(),
+                user.getLogin(),
+                user.getName(),
+                user.getBirthday()
+        );
     }
 
     @Override

@@ -10,8 +10,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.GenreData;
 import ru.yandex.practicum.filmorate.model.RatingData;
-import ru.yandex.practicum.filmorate.storage.FilmDbStorage;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,6 +24,9 @@ class FilmServiceTest {
     private JdbcTemplate jdbcTemplate;
     private FilmStorage filmStorage;
 
+    private GenreStorage genreStorage;
+    private MpaStorage mpa;
+
     @BeforeEach
     void init() {
 
@@ -35,6 +37,9 @@ class FilmServiceTest {
                 .build();
         jdbcTemplate = new JdbcTemplate(embeddedDatabase);
         filmStorage = new FilmDbStorage(jdbcTemplate);
+        genreStorage = new GenreDbStorage(jdbcTemplate);
+        mpa = new MpaDbStorage(jdbcTemplate);
+
     }
 
     List<Film> makeFilms() {
@@ -90,7 +95,7 @@ class FilmServiceTest {
     @Test
     void getGenre() {
 
-        GenreData genres = filmStorage.getGenre(1);
+        GenreData genres = genreStorage.getGenreByID(1);
         assertTrue(genres.getName().equals("Комедия"));
 
     }
@@ -98,7 +103,7 @@ class FilmServiceTest {
     @Test
     void getGenreAll() {
 
-        List<GenreData> genres = filmStorage.getGenreAll();
+        List<GenreData> genres = genreStorage.getGenreAll();
         assertEquals(genres.size(),6);
         assertTrue(genres.get(0).getName().equals("Комедия"));
     }
@@ -106,7 +111,7 @@ class FilmServiceTest {
     @Test
     void getRatingAll() {
 
-        List<RatingData> ratingDataList = filmStorage.getRatingAll();
+        List<RatingData> ratingDataList = mpa.getRatingAll();
         assertEquals(ratingDataList.size(), 5);
     }
 
