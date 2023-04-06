@@ -100,8 +100,8 @@ class UserServiceTest {
         users.get(1).setFriendshipStatuses(new HashMap<>());
         users.get(1).getFriendshipStatuses().put(1, FriendshipStatus.CONFIRMED);
 
-        userStorage.save(users.get(0));
-        userStorage.save(users.get(1));
+        userStorage.update(users.get(0));
+        userStorage.update(users.get(1));
         User user1 = userStorage.getByID(1);
         User user2 = userStorage.getByID(2);
 
@@ -130,8 +130,8 @@ class UserServiceTest {
         users.get(1).setFriendshipStatuses(new HashMap<>());
         users.get(1).getFriendshipStatuses().put(1, FriendshipStatus.CONFIRMED);
 
-        userStorage.save(users.get(0));
-        userStorage.save(users.get(1));
+        userStorage.update(users.get(0));
+        userStorage.update(users.get(1));
         userStorage.deleteFriendship(users.get(0), users.get(1));
         userStorage.deleteFriendship(users.get(1), users.get(0));
         User user1 = userStorage.getByID(1);

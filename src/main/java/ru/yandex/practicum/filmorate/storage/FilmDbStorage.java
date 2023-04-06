@@ -34,6 +34,13 @@ public class FilmDbStorage implements FilmStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public FilmDbStorage(JdbcTemplate jdbcTemplate, GenreStorage genres, MpaStorage mpa) {
+
+        this.mpa = mpa;
+        this.genres = genres;
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     public String checkRating(Film film) {
         String query = "SELECT name FROM mpa WHERE id = ?";
         String rating = jdbcTemplate.queryForObject(query, String.class, film.getMpa().getId());
@@ -197,8 +204,10 @@ public class FilmDbStorage implements FilmStorage {
                     .description((String) row.get("description"))
                     .releaseDate(((java.sql.Date) row.get("release_date")).toLocalDate())
                     .duration((long) row.get("duration"))
-                    .mpa(new RatingData((int) row.get("mpa_id"), (String) row.get("mpa_name")))
                     .build();
+            if ((String) row.get("mpa_name") != null){
+                film.setMpa(new RatingData((int) row.get("mpa_id"),(String) row.get("mpa_name")));
+            }
 
             Set<Integer> likes = new HashSet<>();
             String likesStr = (String) row.get("likes");

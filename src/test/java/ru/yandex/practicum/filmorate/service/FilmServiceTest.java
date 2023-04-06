@@ -24,7 +24,7 @@ class FilmServiceTest {
     private JdbcTemplate jdbcTemplate;
     private FilmStorage filmStorage;
 
-    private GenreStorage genreStorage;
+    private GenreStorage genres;
     private MpaStorage mpa;
 
     @BeforeEach
@@ -36,10 +36,9 @@ class FilmServiceTest {
                 .setType(EmbeddedDatabaseType.H2)
                 .build();
         jdbcTemplate = new JdbcTemplate(embeddedDatabase);
-        filmStorage = new FilmDbStorage(jdbcTemplate);
-        genreStorage = new GenreDbStorage(jdbcTemplate);
+        genres = new GenreDbStorage(jdbcTemplate);
         mpa = new MpaDbStorage(jdbcTemplate);
-
+        filmStorage = new FilmDbStorage(jdbcTemplate, genres,mpa);
     }
 
     List<Film> makeFilms() {
@@ -59,6 +58,8 @@ class FilmServiceTest {
                 .releaseDate(LocalDate.of(2002, 12, 12))
                 .duration(200)
                 .build();
+        film1.setGenres(new ArrayList<>());
+        film2.setGenres(new ArrayList<>());
         films.add(film1);
         films.add(film2);
         return films;
@@ -77,7 +78,7 @@ class FilmServiceTest {
         films = makeFilms();
         filmStorage.save(films.get(0));
         films.get(1).setId(1);
-        filmStorage.save(films.get(1));
+        filmStorage.update(films.get(1));
         Film film = filmStorage.getByID(1);
         assertEquals(film.getName(),films.get(1).getName());
     }
@@ -95,17 +96,17 @@ class FilmServiceTest {
     @Test
     void getGenre() {
 
-        GenreData genres = genreStorage.getGenreByID(1);
-        assertTrue(genres.getName().equals("Комедия"));
+        GenreData genre = genres.getGenreByID(1);
+        assertTrue(genre.getName().equals("Комедия"));
 
     }
 
     @Test
     void getGenreAll() {
 
-        List<GenreData> genres = genreStorage.getGenreAll();
-        assertEquals(genres.size(),6);
-        assertTrue(genres.get(0).getName().equals("Комедия"));
+        List<GenreData> genreList = genres.getGenreAll();
+        assertEquals(genreList.size(),6);
+        assertTrue(genreList.get(0).getName().equals("Комедия"));
     }
 
     @Test
