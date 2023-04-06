@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -29,6 +30,7 @@ public class FilmDbStorage implements FilmStorage {
 
     private int count = 0;
 
+    @Autowired
     public FilmDbStorage(JdbcTemplate jdbcTemplate) {
 
         this.jdbcTemplate = jdbcTemplate;

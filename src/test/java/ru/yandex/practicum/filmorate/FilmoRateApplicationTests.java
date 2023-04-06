@@ -52,7 +52,6 @@ class FilmoRateApplicationTests {
 
     void addUsers() {
 
-        List<User> users = new ArrayList<>();
         User user1 = User.builder()
                 .name("name1")
                 .email("mail@mail.ru")
@@ -75,6 +74,7 @@ class FilmoRateApplicationTests {
     @Test
     public void testFindUserById() {
 
+        System.out.println(userStorage);
         Optional<User> userOptional = Optional.ofNullable(userStorage.getByID(1));
         Optional<User> userOptional2 = Optional.ofNullable(userStorage.getByID(2));
 
